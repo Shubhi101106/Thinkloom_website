@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staffroom — Where Indian educators compare notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F1E4;
+    --paper:#FFFDF6;
+    --ink:#2A2A22;
+    --ink-soft:#5B5A4E;
+    --board:#1F3A2E;
+    --board-dark:#132A20;
+    --marigold:#E2A33D;
+    --marigold-dark:#C4842A;
+    --rust:#B5502F;
+    --notebook:#33546B;
+    --line:rgba(42,42,34,0.14);
+    --line-strong:rgba(42,42,34,0.28);
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block; max-width:100%; height:auto;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; color:var(--ink);}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--rust);
+    font-weight:600;
+  }
+  :focus-visible{outline:3px solid var(--notebook); outline-offset:3px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  .site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,241,228,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-weight:700; font-size:22px; color:var(--board);
+  }
+  .logo .pin-dot{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--marigold);
+    box-shadow:0 1.5px 0 rgba(0,0,0,0.25);
+  }
+  .nav-links{display:flex; align-items:center; gap:32px;}
+  .nav-links a{
+    font-size:15px; font-weight:500; color:var(--ink-soft);
+    padding:6px 2px; border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .nav-links a:hover{color:var(--board); border-color:var(--marigold);}
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:14.5px;
+    padding:10px 20px; border-radius:999px; border:1px solid transparent;
+    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-ghost{color:var(--board); border-color:var(--line-strong); background:transparent;}
+  .btn-ghost:hover{background:rgba(31,58,46,0.06);}
+  .btn-solid{background:var(--rust); color:#FFF7EC;}
+  .btn-solid:hover{transform:translateY(-1px); box-shadow:0 6px 16px rgba(181,80,47,0.32);}
+  .btn-board{background:var(--board); color:#F6F1E4;}
+  .btn-board:hover{transform:translateY(-1px); box-shadow:0 6px 16px rgba(19,42,32,0.35);}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 18% 20%, rgba(226,163,61,0.13), transparent 45%),
+      radial-gradient(ellipse at 85% 75%, rgba(181,80,47,0.14), transparent 50%),
+      var(--board);
+    overflow:hidden;
+    padding:76px 0 96px;
+  }
+  .hero::before{
+    /* subtle chalkboard grain */
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  .hero .wrap{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center;
+  }
+  .hero-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--marigold); font-weight:600; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hero-eyebrow::before{content:"●"; font-size:9px; color:var(--marigold);}
+  .hero h1{
+    color:#FBF7EC; font-size:clamp(34px, 4.6vw, 56px); line-height:1.06; font-weight:600;
+    max-width:640px;
+  }
+  .hero h1 em{
+    font-style:italic; font-weight:500; color:var(--marigold);
+    position:relative; white-space:nowrap;
+  }
+  .hero p.lede{
+    margin-top:22px; font-size:17.5px; line-height:1.65; color:#D8DED4;
+    max-width:520px;
+  }
+  .hero-cta{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .hero-roles{
+    margin-top:38px; display:flex; gap:22px; flex-wrap:wrap;
+  }
+  .hero-roles span{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:#AEBBAE;
+    letter-spacing:0.03em; border-bottom:1px dashed rgba(174,187,174,0.4); padding-bottom:2px;
+  }
+
+  /* pinboard of note cards */
+  .pinboard{position:relative; height:440px;}
+  .note{
+    position:absolute;
+    width:230px;
+    background:var(--paper);
+    border-radius:3px;
+    padding:18px 18px 20px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.28), 0 2px 0 rgba(0,0,0,0.05);
+    font-size:13.5px;
+    color:var(--ink);
+    opacity:0;
+    transform:translateY(14px) rotate(0deg);
+    animation:pin-settle .55s cubic-bezier(.2,.8,.3,1) forwards;
+  }
+  .note::before{
+    content:"";
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+    width:16px; height:16px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #F3C77E, var(--marigold-dark) 75%);
+    box-shadow:0 3px 4px rgba(0,0,0,0.35);
+  }
+  .note .n-role{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--rust); font-weight:600; margin-bottom:8px; display:block;
+  }
+  .note p{line-height:1.5; color:var(--ink-soft);}
+  .note .n-tag{
+    display:inline-block; margin-top:10px; font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; color:var(--notebook); background:rgba(51,84,107,0.09);
+    padding:3px 8px; border-radius:5px;
+  }
+  .note-1{top:6px; left:6px; transform:rotate(-6deg); animation-delay:.15s;}
+  .note-2{top:58px; right:0; transform:rotate(4deg); animation-delay:.32s;}
+  .note-3{bottom:36px; left:56px; transform:rotate(-3deg); animation-delay:.5s;}
+  .note-4{bottom:0; right:32px; transform:rotate(7deg); animation-delay:.68s; width:200px;}
+  @keyframes pin-settle{
+    from{opacity:0; transform:translateY(16px) rotate(var(--rot, 0deg)); }
+    to{opacity:1;}
+  }
+
+  /* ---------- ROLE STRIP ---------- */
+  .roles-strip{
+    background:var(--paper); border-bottom:1px solid var(--line);
+    padding:34px 0;
+  }
+  .roles-strip .wrap{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+  }
+  .roles-strip .rs-label{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft);
+    letter-spacing:0.05em; text-transform:uppercase; min-width:160px;
+  }
+  .roles-strip .rs-items{display:flex; gap:34px; flex-wrap:wrap;}
+  .rs-item{display:flex; align-items:center; gap:10px; font-size:14.5px; font-weight:600; color:var(--ink);}
+  .rs-item .rs-icon{
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:#fff;
+  }
+
+  /* ---------- MAIN LAYOUT ---------- */
+  main{padding:56px 0 20px;}
+  .layout{display:grid; grid-template-columns:270px 1fr; gap:36px; align-items:start;}
+
+  /* sidebar */
+  .side-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; margin-bottom:20px;
+  }
+  .profile-card .avatar{
+    width:52px; height:52px; border-radius:50%; background:var(--notebook);
+    color:#fff; font-family:'Fraunces', serif; font-weight:600; font-size:19px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .profile-card h4{font-size:16px; margin-bottom:2px;}
+  .profile-card .role-badge{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--rust);
+    text-transform:uppercase; letter-spacing:0.05em;
+  }
+  .profile-card .p-stats{
+    display:flex; gap:18px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+  }
+  .profile-card .p-stats div{font-size:13px; color:var(--ink-soft);}
+  .profile-card .p-stats strong{display:block; font-family:'Fraunces', serif; font-size:18px; color:var(--ink);}
+
+  .side-card h5{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;
+  }
+  .grade-list{display:flex; flex-direction:column; gap:2px;}
+  .grade-list button{
+    all:unset; cursor:pointer; font-size:14px; padding:8px 10px; border-radius:8px;
+    color:var(--ink-soft); transition:background .15s ease, color .15s ease;
+  }
+  .grade-list button:hover{background:rgba(51,84,107,0.08); color:var(--notebook);}
+  .grade-list button.active{background:var(--board); color:#F6F1E4; font-weight:600;}
+  .tag-cloud{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag-cloud span{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; padding:5px 10px;
+    border-radius:999px; background:rgba(226,163,61,0.15); color:var(--marigold-dark); font-weight:600;
+  }
+
+  /* feed */
+  .feed-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px;}
+  .feed-head h2{font-size:24px;}
+  .composer{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 20px; display:flex; gap:14px; align-items:center; margin-bottom:24px;
+  }
+  .composer .avatar-sm{
+    width:40px; height:40px; border-radius:50%; background:var(--rust); color:#fff;
+    font-family:'Fraunces', serif; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .composer .fake-input{
+    flex:1; background:var(--bg); border:1px solid var(--line); border-radius:999px;
+    padding:11px 18px; font-size:14.5px; color:var(--ink-soft);
+  }
+
+  .post{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:22px; overflow:hidden;
+    transition:box-shadow .2s ease, transform .2s ease;
+  }
+  .post:hover{box-shadow:0 12px 26px rgba(31,58,46,0.1); transform:translateY(-2px);}
+  .post-head{display:flex; gap:13px; padding:20px 22px 14px;}
+  .post-head .avatar-sm{
+    width:44px; height:44px; border-radius:50%; color:#fff; font-family:'Fraunces', serif;
+    font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px;
+  }
+  .post-meta h4{font-size:15px; margin-bottom:2px;}
+  .post-meta .role-line{font-size:12.5px; color:var(--ink-soft); display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .role-chip{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
+    padding:2px 8px; border-radius:5px; font-weight:600;
+  }
+  .role-chip.principal{background:rgba(181,80,47,0.14); color:var(--rust);}
+  .role-chip.teacher{background:rgba(51,84,107,0.13); color:var(--notebook);}
+  .role-chip.resource{background:rgba(226,163,61,0.2); color:var(--marigold-dark);}
+  .role-chip.owner{background:rgba(31,58,46,0.13); color:var(--board);}
+  .role-chip.parent{background:rgba(120,110,90,0.15); color:#6d6352;}
+  .post-body{padding:0 22px 18px;}
+  .post-body p{font-size:14.5px; color:var(--ink); line-height:1.62;}
+  .post-tags{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .post-tags span{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--notebook);
+    background:rgba(51,84,107,0.08); padding:3px 9px; border-radius:6px;
+  }
+  .post-photo{width:100%; max-height:340px; object-fit:cover;}
+  .post-foot{
+    display:flex; gap:22px; padding:14px 22px; border-top:1px solid var(--line);
+    font-size:13.5px; color:var(--ink-soft);
+  }
+  .post-foot button{
+    all:unset; cursor:pointer; display:flex; align-items:center; gap:7px;
+    transition:color .15s ease;
+  }
+  .post-foot button:hover{color:var(--rust);}
+
+  /* ---------- RESOURCE PERSONS ---------- */
+  .resource-section{background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:64px 0;}
+  .section-head{max-width:640px; margin-bottom:36px;}
+  .section-head h2{font-size:30px; margin-top:10px;}
+  .section-head p{color:var(--ink-soft); margin-top:12px; font-size:15.5px; line-height:1.6;}
+  .rp-scroller{
+    display:grid; grid-auto-flow:column; grid-auto-columns:280px; gap:20px;
+    overflow-x:auto; padding-bottom:10px; scroll-snap-type:x proximity;
+  }
+  .rp-card{
+    scroll-snap-align:start;
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    background:var(--bg);
+  }
+  .rp-card img{width:100%; height:150px; object-fit:cover;}
+  .rp-card-body{padding:16px 18px 20px;}
+  .rp-card-body h4{font-size:15.5px; margin-bottom:4px;}
+  .rp-card-body .rp-role{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--rust); text-transform:uppercase; letter-spacing:0.04em;}
+  .rp-card-body p{font-size:13.5px; color:var(--ink-soft); margin-top:10px; line-height:1.55;}
+
+  /* ---------- NCF BAND ---------- */
+  .ncf-band{background:var(--board); padding:66px 0; position:relative; overflow:hidden;}
+  .ncf-band::after{
+    content:""; position:absolute; right:-60px; top:-60px; width:280px; height:280px;
+    border-radius:50%; background:radial-gradient(circle, rgba(226,163,61,0.16), transparent 70%);
+  }
+  .ncf-head{max-width:600px; position:relative; z-index:1;}
+  .ncf-head .eyebrow{color:var(--marigold);}
+  .ncf-head h2{color:#F8F4E8; font-size:29px; margin-top:10px;}
+  .ncf-head p{color:#C9D2C6; margin-top:12px; font-size:15.5px; line-height:1.65;}
+  .ncf-grid{
+    margin-top:34px; display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; position:relative; z-index:1;
+  }
+  .ncf-card{
+    background:rgba(246,241,228,0.06); border:1px solid rgba(246,241,228,0.16);
+    border-radius:var(--radius); padding:22px;
+  }
+  .ncf-card .eyebrow{color:var(--marigold); font-size:11px;}
+  .ncf-card h4{color:#F8F4E8; font-size:16.5px; margin-top:8px; margin-bottom:8px; font-weight:600;}
+  .ncf-card p{color:#B9C4B6; font-size:13.5px; line-height:1.6;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--board-dark); padding:48px 0 30px;}
+  .footer-top{
+    display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:30px;
+    padding-bottom:30px; border-bottom:1px solid rgba(246,241,228,0.12);
+  }
+  .footer-top .logo{color:#F6F1E4;}
+  .footer-cols{display:flex; gap:56px; flex-wrap:wrap;}
+  .footer-col h5{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+    color:#8FA08D; margin-bottom:14px;
+  }
+  .footer-col a{display:block; font-size:14px; color:#D6DBD1; margin-bottom:9px;}
+  .footer-col a:hover{color:var(--marigold);}
+  .footer-bottom{
+    display:flex; justify-content:space-between; padding-top:22px; flex-wrap:wrap; gap:10px;
+    font-size:12.5px; color:#7C8C7A;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:920px){
+    .nav-links{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .pinboard{height:340px; margin-top:20px;}
+    .layout{grid-template-columns:1fr;}
+    .side-card{display:none;}
+    .ncf-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:560px){
+    .hero{padding:52px 0 70px;}
+    .note{width:190px; padding:14px;}
+    .roles-strip .wrap{flex-direction:column; align-items:flex-start;}
+    .post-head{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="#" class="logo"><span class="pin-dot"></span>Staffroom</a>
+    <ul class="nav-links">
+      <li><a href="#feed">Feed</a></li>
+      <li><a href="#resource-persons">Resource Persons</a></li>
+      <li><a href="#ncf">NCF &amp; NEP Hub</a></li>
+      <li><a href="#">Workshops</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#" class="btn btn-solid">Join Staffroom</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Pre-Primary to Class 12 &middot; India</div>
+      <h1>Where Indian educators <em>compare notes.</em></h1>
+      <p class="lede">A staffroom for school owners, principals, teachers, resource persons and parents to share what actually works in the classroom — activities, methods, and NCF-aligned ideas, not just theory.</p>
+      <div class="hero-cta">
+        <a href="#" class="btn btn-solid">Join as an educator</a>
+        <a href="#feed" class="btn btn-ghost" style="border-color:rgba(246,241,228,0.35); color:#F6F1E4;">See what's being shared</a>
+      </div>
+      <div class="hero-roles">
+        <span>School Owners</span>
+        <span>Principals</span>
+        <span>Teachers</span>
+        <span>Resource Persons</span>
+        <span>Parents</span>
+      </div>
+    </div>
+    <div class="pinboard" aria-hidden="true">
+      <div class="note note-1">
+        <span class="n-role">Class 3 &middot; Teacher</span>
+        <p>Switched to a "story-first" method for EVS — retention up noticeably by unit test time.</p>
+        <span class="n-tag">#ActivityBased</span>
+      </div>
+      <div class="note note-2">
+        <span class="n-role">Principal</span>
+        <p>Peer classroom observation once a fortnight, not once a term. Small shift, real change in staff confidence.</p>
+      </div>
+      <div class="note note-3">
+        <span class="n-role">Resource Person</span>
+        <p>3 warm-up questioning techniques that pull quiet students into a Class 6 discussion.</p>
+        <span class="n-tag">#NCF</span>
+      </div>
+      <div class="note note-4">
+        <span class="n-role">Parent</span>
+        <p>What a 10-minute reading-aloud routine at home actually changed for my daughter.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="roles-strip">
+  <div class="wrap">
+    <span class="rs-label">Built for every seat in the school</span>
+    <div class="rs-items">
+      <div class="rs-item"><span class="rs-icon" style="background:var(--board);">S</span>School Owners</div>
+      <div class="rs-item"><span class="rs-icon" style="background:var(--rust);">P</span>Principals</div>
+      <div class="rs-item"><span class="rs-icon" style="background:var(--notebook);">T</span>Teachers</div>
+      <div class="rs-item"><span class="rs-icon" style="background:var(--marigold-dark);">R</span>Resource Persons</div>
+      <div class="rs-item"><span class="rs-icon" style="background:#7A6A50;">A</span>Parents</div>
+    </div>
+  </div>
+</section>
+
+<main id="feed">
+  <div class="wrap">
+    <div class="layout">
+
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="side-card profile-card">
+          <div class="avatar">SM</div>
+          <h4>Shivani Trivedi</h4>
+          <div class="role-badge">Principal &middot; Noida</div>
+          <div class="p-stats">
+            <div><strong>16</strong>yrs in education</div>
+            <div><strong>48</strong>connections</div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h5>Filter by grade</h5>
+          <div class="grade-list">
+            <button>Pre-Primary</button>
+            <button class="active">Primary (1–5)</button>
+            <button>Middle (6–8)</button>
+            <button>Secondary (9–10)</button>
+            <button>Senior Secondary (11–12)</button>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h5>Popular tags</h5>
+          <div class="tag-cloud">
+            <span>#NCF2023</span>
+            <span>#NEP2020</span>
+            <span>#ActivityBased</span>
+            <span>#ClassroomMgmt</span>
+            <span>#FLN</span>
+            <span>#Assessment</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- FEED -->
+      <div class="feed-col">
+        <div class="feed-head">
+          <h2>What's working in classrooms this week</h2>
+        </div>
+
+        <div class="composer">
+          <div class="avatar-sm">SM</div>
+          <div class="fake-input">Share a practice that worked with your students…</div>
+          <a href="#" class="btn btn-board" style="padding:9px 18px;">Post</a>
+        </div>
+
+        <article class="post">
+          <div class="post-head">
+            <div class="avatar-sm" style="background:var(--notebook);">AK</div>
+            <div class="post-meta">
+              <h4>Anjali Kaushik</h4>
+              <div class="role-line"><span class="role-chip teacher">Teacher</span> Class 4 &middot; EVS &middot; Ghaziabad</div>
+            </div>
+          </div>
+          <div class="post-body">
+            <p>Tried a "classroom museum" for the chapter on states of matter — each group set up a small display table and explained their exhibit to visiting classmates. Quietest group of the term ended up asking the most questions. Sharing the exhibit-card template if anyone wants to try it.</p>
+            <div class="post-tags"><span>#ActivityBased</span><span>#EVS</span><span>#Class4</span></div>
+          </div>
+          <img class="post-photo" src="https://images.unsplash.com/photo-1719159381916-062fa9f435a6?w=1000&q=80&auto=format&fit=crop" alt="Children seated at desks in a classroom during an activity">
+          <div class="post-foot">
+            <button>👏 Appreciate · 34</button>
+            <button>💬 Comment · 12</button>
+            <button>↗ Save</button>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-head">
+            <div class="avatar-sm" style="background:var(--rust);">RD</div>
+            <div class="post-meta">
+              <h4>Rakesh Dubey</h4>
+              <div class="role-line"><span class="role-chip principal">Principal</span> Kanpur, Uttar Pradesh</div>
+            </div>
+          </div>
+          <div class="post-body">
+            <p>We moved staff meetings from "updates" to "one practice, one problem" — every teacher brings one thing that worked and one thing that didn't. Meetings run longer but nobody's staring at their phone anymore. Worth the trade.</p>
+            <div class="post-tags"><span>#SchoolLeadership</span><span>#StaffMeetings</span></div>
+          </div>
+          <img class="post-photo" src="https://images.unsplash.com/photo-1636772523547-5577d04e8dc1?w=1000&q=80&auto=format&fit=crop" alt="A classroom with a chalkboard and rows of desks">
+          <div class="post-foot">
+            <button>👏 Appreciate · 61</button>
+            <button>💬 Comment · 19</button>
+            <button>↗ Save</button>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-head">
+            <div class="avatar-sm" style="background:var(--marigold-dark);">NP</div>
+            <div class="post-meta">
+              <h4>Nisha Prasad</h4>
+              <div class="role-line"><span class="role-chip resource">Resource Person</span> Teacher Trainer, FLN Mission</div>
+            </div>
+          </div>
+          <div class="post-body">
+            <p>Three questioning moves that consistently open up a quiet Class 6–7 classroom: wait 5 full seconds before taking an answer, ask "who can add to that" instead of "who has a different answer," and let one student restate another's point before moving on. Small habits, noticeably more hands up by week two.</p>
+            <div class="post-tags"><span>#NCF</span><span>#TeacherTraining</span><span>#Questioning</span></div>
+          </div>
+          <div class="post-foot">
+            <button>👏 Appreciate · 88</button>
+            <button>💬 Comment · 27</button>
+            <button>↗ Save</button>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-head">
+            <div class="avatar-sm" style="background:#7A6A50;">MS</div>
+            <div class="post-meta">
+              <h4>Meenal Sharma</h4>
+              <div class="role-line"><span class="role-chip parent">Parent</span> Class 2, Noida</div>
+            </div>
+          </div>
+          <div class="post-body">
+            <p>Our daughter's teacher started sending home a single "talk about this" question after every EVS class instead of homework. Dinner-table conversation has genuinely improved — she explains what she learned instead of just saying "fine" when we ask about school.</p>
+            <div class="post-tags"><span>#HomeSchoolLink</span></div>
+          </div>
+          <div class="post-foot">
+            <button>👏 Appreciate · 45</button>
+            <button>💬 Comment · 8</button>
+            <button>↗ Save</button>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<section class="resource-section" id="resource-persons">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Learn from the trainers</div>
+      <h2>Resource persons &amp; teacher trainers</h2>
+      <p>Practising trainers sharing practical, classroom-ready tips — not just theory — on teacher training, NCF alignment, and everyday classroom activities.</p>
+    </div>
+    <div class="rp-scroller">
+      <div class="rp-card">
+        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500&q=80&auto=format&fit=crop" alt="A group of teachers in a training session with a projector screen">
+        <div class="rp-card-body">
+          <h4>Foundational Literacy Circles</h4>
+          <span class="rp-role">Teacher Training Tip</span>
+          <p>A 15-minute peer reading-circle format for Pre-Primary and Class 1 that needs no extra material.</p>
+        </div>
+      </div>
+      <div class="rp-card">
+        <img src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?w=500&q=80&auto=format&fit=crop" alt="Trainers taking notes during a workshop session">
+        <div class="rp-card-body">
+          <h4>Reading NCF 2023 with your staff</h4>
+          <span class="rp-role">Workshop Format</span>
+          <p>A one-hour staffroom session structure to unpack one NCF chapter at a time, without the jargon overload.</p>
+        </div>
+      </div>
+      <div class="rp-card">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&q=80&auto=format&fit=crop" alt="A teacher presenting to a classroom of students">
+        <div class="rp-card-body">
+          <h4>Formative checks that take 2 minutes</h4>
+          <span class="rp-role">Classroom Activity</span>
+          <p>Exit tickets and thumb-checks that fit into the last two minutes of a Class 5–8 period.</p>
+        </div>
+      </div>
+      <div class="rp-card">
+        <img src="https://images.unsplash.com/photo-1654366677760-b1aaa51b9e02?w=500&q=80&auto=format&fit=crop" alt="A classroom with a blackboard and wooden benches">
+        <div class="rp-card-body">
+          <h4>Multi-grade classroom management</h4>
+          <span class="rp-role">Practical Guide</span>
+          <p>Rotating-station activities that let one teacher run three grade levels at once without chaos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ncf-band" id="ncf">
+  <div class="wrap">
+    <div class="ncf-head">
+      <div class="eyebrow">Grounded in the framework</div>
+      <h2>The NCF &amp; NEP corner</h2>
+      <p>Practical, staffroom-tested ways to bring the National Curriculum Framework and NEP 2020 into ordinary Tuesday lesson plans — shared by people actually doing it.</p>
+    </div>
+    <div class="ncf-grid">
+      <div class="ncf-card">
+        <div class="eyebrow">Foundational Stage</div>
+        <h4>Play-based EVS for Pre-Primary</h4>
+        <p>Five sensory activities that map directly to the Foundational Stage curriculum goals, tested across three schools in UP.</p>
+      </div>
+      <div class="ncf-card">
+        <div class="eyebrow">Preparatory Stage</div>
+        <h4>Competency-based worksheets, Class 3–5</h4>
+        <p>Moving from rote fill-in-the-blanks to short application questions, with sample worksheets shared by teachers.</p>
+      </div>
+      <div class="ncf-card">
+        <div class="eyebrow">Middle Stage</div>
+        <h4>Interdisciplinary projects for Class 6–8</h4>
+        <p>How one Kanpur school ran a two-week Math-meets-Art project inspired by the NCF's interdisciplinary push.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <a href="#" class="logo"><span class="pin-dot"></span>Staffroom</a>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Explore</h5>
+          <a href="#feed">Feed</a>
+          <a href="#resource-persons">Resource Persons</a>
+          <a href="#ncf">NCF &amp; NEP Hub</a>
+          <a href="#">Workshops</a>
+        </div>
+        <div class="footer-col">
+          <h5>Community</h5>
+          <a href="#">School Owners</a>
+          <a href="#">Principals</a>
+          <a href="#">Teachers</a>
+          <a href="#">Parents</a>
+        </div>
+        <div class="footer-col">
+          <h5>About</h5>
+          <a href="#">Our story</a>
+          <a href="#">Guidelines</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Staffroom. Built for school educators across India.</span>
+      <span>Pre-Primary to Class 12</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
